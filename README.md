@@ -1,7 +1,6 @@
 PROGRESS
 =============================
-LISTVIEW
-ARRAY ADAPTER
+INITIAL BUILD 
 
 
 
