@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,38 +29,72 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>{
     // returns item view - displays earthquake info
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-        // check if existing listview (CALLED convertview) to reuse
-        //otherwise if convertview = null then inflate listitem layout
-
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // Check if there is an existing list item view (called convertView) that we can reuse,
+        // otherwise, if convertView is null, then inflate a new list item layout.
         View listItemView = convertView;
-        if(listItemView == null){
-            listItemView = LayoutInflater.from(getContext()).inflate(       // inflate ze badboy
+        if (listItemView == null) {
+            listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.earthquake_list_item, parent, false);
         }
 
-        // find earthquake at given position in list of earthquakes
+        // Find the earthquake at the given position in the list of earthquakes
         Earthquake currentEarthquake = getItem(position);
 
-        //find Textview ID with ID magnitude
+        // Find the TextView with view ID magnitude
         TextView magnitudeView = (TextView) listItemView.findViewById(R.id.magnitude);
-        // display magnitude of current in that Textview
+        // Display the magnitude of the current earthquake in that TextView
         magnitudeView.setText(currentEarthquake.getMagnitude());
 
-        // find Textview wiht ID location
+        // Find the TextView with view ID location
         TextView locationView = (TextView) listItemView.findViewById(R.id.location);
-        // display location of current in that Textview
+        // Display the location of the current earthquake in that TextView
         locationView.setText(currentEarthquake.getLocation());
 
-        // find textview with date ID in that textview location
-        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
-        // display date of current in that textview
-        dateView.setText(currentEarthquake.getDate());
+        // Create a new Date object from the time in milliseconds of the earthquake
+        Date dateObject = new Date(currentEarthquake.getTimeInMilliseconds());
 
-        // once we have the info, we return the view to the caller
+
+
+
+
+
+
+        // Find the TextView with view ID date
+        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
+        // Format the date string (i.e. "Mar 3, 1984")
+        String formattedDate = formatDate(dateObject);
+        // Display the date of the current earthquake in that TextView
+        dateView.setText(formattedDate);
+
+        // Find the TextView with view ID time
+        TextView timeView = (TextView) listItemView.findViewById(R.id.time);
+        // Format the time string (i.e. "4:30PM")
+        String formattedTime = formatTime(dateObject);
+        // Display the time of the current earthquake in that TextView
+        timeView.setText(formattedTime);
+
+        // Return the list item view that is now showing the appropriate data
         return listItemView;
 
 
 
+    }
+
+
+    /**
+     * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
+     */
+    private String formatDate(Date dateObject) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
+        return dateFormat.format(dateObject);
+    }
+
+    /**
+     * Return the formatted date string (i.e. "4:30 PM") from a Date object.
+     */
+    private String formatTime(Date dateObject) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+        return timeFormat.format(dateObject);
     }
 }
