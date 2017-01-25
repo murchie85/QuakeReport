@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static android.view.View.Z;
+
 /**
  * Created by adammcmurchie on 22/01/2017.
  */
@@ -20,6 +22,8 @@ import java.util.List;
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake>{
 
     //CONSTRUCT NEW EARTHQUAKE ADAPTER
+
+    private static final String LOCATION_SEPARATOR = " of ";
 
     /**
      * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
@@ -54,25 +58,24 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>{
                     R.layout.earthquake_list_item, parent, false);
         }
 
+        //==========================LOCATE IN THE ARRAY=================================
         // Find the earthquake at the given position in the list of earthquakes
         Earthquake currentEarthquake = getItem(position);
+
+
+        //==========================MAGNITUDE============================================
 
         // Find the TextView with view ID magnitude
         TextView magnitudeView = (TextView) listItemView.findViewById(R.id.magnitude);
         // Display the magnitude of the current earthquake in that TextView
         magnitudeView.setText(currentEarthquake.getMagnitude());
-
-        // Find the TextView with view ID location
-        TextView locationView = (TextView) listItemView.findViewById(R.id.location);
-        // Display the location of the current earthquake in that TextView
-        locationView.setText(currentEarthquake.getLocation());
+        //==============================================================================
 
 
 
-
+        //==========================DATE================================================
         // Create a new Date object from the time in milliseconds of the earthquake
         Date dateObject = new Date(currentEarthquake.getTimeInMilliseconds());
-
 
         // Find the TextView with view ID date
         TextView dateView = (TextView) listItemView.findViewById(R.id.date);
@@ -88,13 +91,33 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>{
         // Display the time of the current earthquake in that TextView
         timeView.setText(formattedTime);
 
+        
+
+        //============================LOCATION=====================================
+        String originalLocation = currentEarthquake.getLocation();
+        String primaryLocation;
+        String locationOffset;
+
+        if (originalLocation.contains(LOCATION_SEPARATOR)) {
+            String[] parts = originalLocation.split(LOCATION_SEPARATOR);
+            locationOffset = parts[0] + LOCATION_SEPARATOR;
+            primaryLocation = parts[1];
+        } else {
+            locationOffset = getContext().getString(R.string.near_the);
+            primaryLocation = originalLocation;
+        }
 
 
+        TextView primaryLocationView = (TextView) listItemView.findViewById(R.id.primary_location);
+        primaryLocationView.setText(primaryLocation);
 
+        TextView locationOffsetView = (TextView) listItemView.findViewById(R.id.location_offset);
+        locationOffsetView.setText(locationOffset);
 
         // Return the list item view that is now showing the appropriate data
         return listItemView;
     }
+
 
 
 
