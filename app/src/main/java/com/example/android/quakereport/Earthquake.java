@@ -1,5 +1,9 @@
 package com.example.android.quakereport;
 
+import android.os.AsyncTask;
+
+import java.util.List;
+
 /**
  * Created by adammcmurchie on 22/01/2017.
  */
@@ -17,6 +21,10 @@ public class Earthquake {
 
     /** Website URL of the earthquake */
     private String mUrl;
+
+    /** URL for earthquake data from the USGS dataset */
+    private static final String USGS_REQUEST_URL =
+            "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
 
     /**
      * Constructs a new {@link Earthquake} object.
@@ -48,7 +56,6 @@ public class Earthquake {
 
 
 
-    // public String getDate(){ return mDate;}  dead
 
 
 }
